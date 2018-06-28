@@ -8,7 +8,7 @@ import { SET_CURRENT_USER } from "./actionTypes";
 export const register = (userData, history) => dispatch => {
     axios
         .post('http://localhost:5000/api/users/register', userData)
-        .then(response => history.push('/login'))
+        .then(() => history.push('/login'))
         .catch(error => dispatch({ type: GET_ERRORS, payload: error.response.data }));
 };
 

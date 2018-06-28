@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import Auth from '../../hoc/guards/auth';
+import Auth from '../../hoc/guards/Auth';
 
 class Landing extends Component {
     render() {
