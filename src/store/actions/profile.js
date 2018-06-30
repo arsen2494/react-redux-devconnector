@@ -22,6 +22,17 @@ export const getProfile = () => dispatch => {
       }));
 };
 
+// Add experience
+export const addExperience = (expData, history) => dispatch => {
+  axios
+      .post('http://localhost:5000/api/profile/experience', expData)
+      .then(() => history.push('/dashboard'))
+      .catch(error => dispatch({
+        type: GET_ERRORS,
+        payload: error.response.data
+      }));
+};
+
 // Delete account & profile
 export const deleteAccount = () => dispatch => {
   if (window.confirm('Are you sure?')) {
