@@ -14,6 +14,7 @@ import Dashboard from "./components/Dashboard/Dashboard";
 import {clearCurrentProfile} from "./store/actions/profile";
 import PrivateRoute from "./components/common/PrivateRoute";
 import CreateProfile from "./components/CreateProfile/CreateProfile";
+import EditProfile from "./components/EditProfile/EditProfile";
 
 const token = localStorage.getItem('jwtToken');
 // Check for token
@@ -44,6 +45,7 @@ class App extends Component {
         <div className="App">
           <Navbar/>
           <Switch>
+            <PrivateRoute path="/edit-profile" component={EditProfile}/>
             <PrivateRoute path="/create-profile" component={CreateProfile}/>
             <PrivateRoute path="/dashboard" component={Dashboard}/>
             <Route path="/login" component={Login}/>

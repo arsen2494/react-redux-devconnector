@@ -5,7 +5,7 @@ import TextFieldGroup from '../common/TextFieldGroup';
 import SelectListGroup from "../common/SelectListGroup";
 import TextAreaFieldGroup from "../common/TextAreaFieldGroup";
 import InputGroup from "../common/InputGroup";
-import {createProfile} from "../../store/actions/profile";
+import {createProfile, getProfile} from "../../store/actions/profile";
 
 class CreateProfile extends Component {
   constructor(props) {
@@ -57,9 +57,45 @@ class CreateProfile extends Component {
     }, this.props.history);
   }
 
+  componentDidMount() {
+    this.props.getProfile();
+  }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.errors) {
       this.setState({errors: nextProps.errors});
+    }
+
+    if (nextProps.profile.profile) {
+      const profile = nextProps.profile.profile;
+      const skillsCSV = profile.skills.join(',');
+
+      profile.company = profile.company ? profile.company : '';
+      profile.website = profile.website ? profile.website : '';
+      profile.location = profile.location ? profile.location : '';
+      profile.githubusername = profile.githubusername ? profile.githubusername : '';
+      profile.bio = profile.bio ? profile.bio : '';
+      profile.social = profile.social ? profile.social : {};
+      profile.twitter = profile.social.twitter ? profile.social.twitter : '';
+      profile.facebook = profile.social.facebook ? profile.social.facebook : '';
+      profile.linkedin = profile.social.linkedin ? profile.social.linkedin : '';
+      profile.youtube = profile.social.youtube ? profile.social.youtube : '';
+      profile.instagram = profile.social.instagram ? profile.social.instagram : '';
+
+      this.setState({
+        handle: profile.handle,
+        company: profile.company,
+        website: profile.website,
+        location: profile.location,
+        status: profile.status,
+        skills: skillsCSV,
+        githubusername: profile.githubusername,
+        bio: profile.bio,
+        twitter: profile.twitter,
+        facebook: profile.facebook,
+        linkedin: profile.linkedin,
+        youtube: profile.youtube,
+      });
     }
   }
 
@@ -99,8 +135,7 @@ class CreateProfile extends Component {
                 <a href="dashboard.html" className="btn btn-light">
                   Go Back
                 </a>
-                <h1 className="display-4 text-center">Create Your Profile</h1>
-                <p className="lead text-center">Let's get some information to make your profile stand out</p>
+                <h1 className="display-4 text-center">Edit Profile</h1>
                 <small className="d-block pb-3">* = required field</small>
                 <form onSubmit={this.onSubmit.bind(this)}>
                   <TextFieldGroup name="handle" value={this.state.handle}
@@ -152,6 +187,8 @@ class CreateProfile extends Component {
 CreateProfile.propTypes = {
   profile: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired,
+  createProfile: PropTypes.func.isRequired,
+  getProfile: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -160,7 +197,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  createProfile: (profileData, history) => dispatch(createProfile(profileData, history))
+  createProfile: (profileData, history) => dispatch(createProfile(profileData, history)),
+  getProfile: () => dispatch(getProfile())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CreateProfile);

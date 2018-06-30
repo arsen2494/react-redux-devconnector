@@ -1,5 +1,11 @@
 import axios from 'axios';
-import {GET_PROFILE, PROFILE_LOADING, CLEAR_CURRENT_PROFILE} from '../actions/actionTypes';
+import {
+  GET_PROFILE,
+  PROFILE_LOADING,
+  CLEAR_CURRENT_PROFILE,
+  GET_ERRORS,
+  SET_CURRENT_USER
+} from '../actions/actionTypes';
 
 // Get current profile
 export const getProfile = () => dispatch => {
@@ -16,6 +22,22 @@ export const getProfile = () => dispatch => {
       }));
 };
 
+// Delete account & profile
+export const deleteAccount = () => dispatch => {
+  if (window.confirm('Are you sure?')) {
+    axios
+        .delete(`http://localhost:5000/api/profile`)
+        .then(() => dispatch({
+          type: SET_CURRENT_USER,
+          payload: {}
+        }))
+        .catch(error => dispatch({
+          type: GET_ERRORS,
+          payload: error.response.data
+        }));
+  }
+};
+
 // Profile loading
 export const setProfileLoading = () => ({
   type: PROFILE_LOADING
@@ -25,4 +47,12 @@ export const setProfileLoading = () => ({
 export const clearCurrentProfile = () => ({
   type: CLEAR_CURRENT_PROFILE
 });
+
+// Create Profile
+export const createProfile = (profileData, history) => dispatch => {
+  axios
+      .post('http://localhost:5000/api/profile', profileData)
+      .then(() => history.push('/dashboard'))
+      .catch(error => dispatch({type: GET_ERRORS, payload: error.response.data}));
+};
 
